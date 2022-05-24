@@ -1,11 +1,18 @@
 {
-  "name": "nasa-project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Raka Pratama",
-  "license": "ISC"
+	"name": "nasa-project",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"client": "npm start --prefix client",
+		"deploy": "npm run build --prefix client && npm start --prefix server",
+		"dev": "npm run client & npm run server",
+		"install": "npm run install-server && npm run install-client",
+		"install-client": "npm install --prefix client",
+		"install-server": "npm install --prefix server",
+		"server": "npm run dev --prefix server",
+		"test": "npm run test --prefix server && npm run test --prefix client"
+	},
+	"author": "Raka Pratama",
+	"license": "ISC"
 }
