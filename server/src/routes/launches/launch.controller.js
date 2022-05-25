@@ -42,7 +42,7 @@ function httpAbortLaunch(req, res) {
 			});
 		}
 
-		const aborted = abortLaunchById(Number(id));
+		abortLaunchById(Number(id));
 		return res.status(200).json({
 			message: 'Launch aborted',
 		});
