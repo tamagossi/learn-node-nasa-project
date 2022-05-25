@@ -20,10 +20,17 @@ async function httpGetLaunches() {
 
 async function httpSubmitLaunch(launch) {
 	try {
-		const response = await fetch(`${API_URL}/launches`);
-		return await response.json();
+		return await fetch(`${API_URL}/launches`, {
+			body: JSON.stringify(launch),
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
 	} catch (error) {
-		throw new Error(error);
+		return {
+			ok: false,
+		};
 	}
 }
 
