@@ -11,14 +11,13 @@ function httpAddLaunch(req, res) {
 			});
 		}
 
-		const date = new Date(launchDate);
-		if (isNaN(date.toString())) {
+		if (new Date(launchDate) === 'Invalid Date') {
 			return res.status(400).json({
 				error: `Launch date format is invalid`,
 			});
 		}
 
-		launch.launchDate = date;
+		launch.launchDate = new Date(launchDate);
 		const newLaunch = addLaunch(launch);
 
 		return res.status(201).json(newLaunch);
@@ -29,7 +28,9 @@ function httpAddLaunch(req, res) {
 
 function httpGetLaunches(_, res) {
 	try {
-		return res.status(200).json(getLaunches);
+		const launches = getLaunches();
+
+		return res.status(200).json(launches);
 	} catch (error) {
 		throw new Error(error);
 	}
