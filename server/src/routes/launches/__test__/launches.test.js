@@ -50,7 +50,7 @@ describe('Test POST /launches', () => {
 	});
 
 	test('It should catch invalid dates', async () => {
-		const response = await request(app).post('/launches').send(dataWithoutDate);
+		const response = await request(app).post('/launches').send(dataWithInvalidDate);
 		expect(response.statusCode).toBe(400);
 
 		expect(response.body).toStrictEqual({
