@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "nodemon src/server.js",
 		"start": "node src/server.js",
-		"test": "jest"
+		"test": "jest",
+		"test:watch": "jest --watch"
 	},
 	"author": "Raka Pratama",
 	"license": "ISC",
@@ -18,6 +19,7 @@
 	},
 	"devDependencies": {
 		"jest": "^28.1.0",
-		"nodemon": "^2.0.16"
+		"nodemon": "^2.0.16",
+		"supertest": "^6.2.3"
 	}
 }
