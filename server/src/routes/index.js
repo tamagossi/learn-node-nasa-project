@@ -5,7 +5,7 @@ const planetRouter = require('./planets/planet.router');
 
 const router = express.Router();
 
-router.use('/', planetRouter);
-router.use('/', launchRouter);
+router.use('/planets', planetRouter);
+router.use('/launches', launchRouter);
 
 module.exports = router;

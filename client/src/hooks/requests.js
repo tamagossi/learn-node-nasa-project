@@ -19,8 +19,12 @@ async function httpGetLaunches() {
 }
 
 async function httpSubmitLaunch(launch) {
-	// TODO: Once API is ready.
-	// Submit given launch data to launch system.
+	try {
+		const response = await fetch(`${API_URL}/launches`);
+		return await response.json();
+	} catch (error) {
+		throw new Error(error);
+	}
 }
 
 async function httpAbortLaunch(id) {
