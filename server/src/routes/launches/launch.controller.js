@@ -1,9 +1,8 @@
 const {
-	getLaunches,
-	addLaunch,
-	abortLaunch,
-	checkIfLaunchIsExist,
 	abortLaunchById,
+	addLaunch,
+	checkIfLaunchIsExist,
+	getLaunches,
 } = require('../../models/launches.model');
 
 function httpAddLaunch(req, res) {

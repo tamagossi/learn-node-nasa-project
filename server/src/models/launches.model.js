@@ -1,6 +1,6 @@
 let latestFlightNumber = 1;
 const defaultLaunch = {
-	customer: ['TAMAGOSSI GROUP', 'NASA'],
+	customers: ['TAMAGOSSI GROUP', 'NASA'],
 	destination: 'Kepler-442 b',
 	flightNumber: 1,
 	launchDate: new Date('Descember 27, 2030'),
@@ -18,7 +18,7 @@ function addLaunch(launch) {
 		latestFlightNumber++;
 		launches.set(latestFlightNumber, {
 			...launch,
-			customer: ['TAMAGOSSI GROUP', 'NASA'],
+			customers: ['TAMAGOSSI GROUP', 'NASA'],
 			flightNumber: latestFlightNumber,
 			success: true,
 			upcoming: true,
