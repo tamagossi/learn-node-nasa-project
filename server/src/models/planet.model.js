@@ -37,7 +37,7 @@ const loadPlanetsData = () => {
 
 async function savePlanet(planet) {
 	try {
-		await planetSchema.updateOne(
+		await planetSchema.findOneAndUpdate(
 			{
 				keplerName: planet.kepler_name,
 			},
