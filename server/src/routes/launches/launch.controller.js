@@ -1,6 +1,6 @@
 const {
 	abortLaunchById,
-	addLaunch,
+	scheduleNewLaunch,
 	checkIfLaunchIsExist,
 	getLaunches,
 } = require('../../models/launches.model');
@@ -23,7 +23,7 @@ function httpAddLaunch(req, res) {
 		}
 
 		launch.launchDate = new Date(launchDate);
-		const newLaunch = addLaunch(launch);
+		const newLaunch = scheduleNewLaunch(launch);
 
 		return res.status(201).json(newLaunch);
 	} catch (error) {

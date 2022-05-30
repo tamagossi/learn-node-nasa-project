@@ -1,7 +1,9 @@
 const launchesSchema = require('./launches.schema');
+const planetSchema = require('./planet.schema');
+const planetSchema = require('./planet.schema');
 
-let latestFlightNumber = 1;
-const defaultLaunch = {
+const DEFAULT_FLIGHT_NUMBER = 1;
+const DEFAULT_LAUNCH = {
 	customers: ['TAMAGOSSI GROUP', 'NASA'],
 	destination: 'Kepler-442 b',
 	flightNumber: 1,
@@ -13,24 +15,31 @@ const defaultLaunch = {
 };
 
 const launches = new Map();
-launches.set(defaultLaunch.flightNumber, defaultLaunch);
+launches.set(DEFAULT_LAUNCH.flightNumber, DEFAULT_LAUNCH);
 
-async function addLaunch(launch) {
+async function scheduleNewLaunch(launch) {
 	try {
-		latestFlightNumber++;
-		launches.set(latestFlightNumber, {
+		const flightNumber = (await getLatestFlightNumber()) + 1;
+
+		const newLaunch = {
 			...launch,
+			flightNumber,
 			customers: ['TAMAGOSSI GROUP', 'NASA'],
-			flightNumber: latestFlightNumber,
 			success: true,
 			upcoming: true,
-		});
+		};
 
-		await saveLaunch(launch);
-		return launches.get(latestFlightNumber);
+		await saveLaunch(newLaunch);
 	} catch (error) {
 		throw new Error(error);
 	}
+}
+
+async function getLatestFlightNumber() {
+	const latestLaunch = await launchesSchema.findOne({}).sort('-flightNumber');
+
+	if (!latestLaunch) return DEFAULT_FLIGHT_NUMBER;
+	return latestLaunch.flightNumber;
 }
 
 function abortLaunchById(id) {
@@ -51,6 +60,12 @@ async function getLaunches() {
 }
 
 async function saveLaunch(launch) {
+	const planet = await planetSchema.findOne({
+		kaplerName: launch.target,
+	});
+
+	if (!planet) throw new Error('No matching planet found');
+
 	await launchesSchema.updateOne(
 		{
 			flightNumber: launch.flightNumber,
@@ -62,7 +77,7 @@ async function saveLaunch(launch) {
 
 module.exports = {
 	abortLaunchById,
-	addLaunch,
+	scheduleNewLaunch,
 	checkIfLaunchIsExist,
 	getLaunches,
 	launches,
