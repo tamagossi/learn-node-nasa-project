@@ -3,19 +3,6 @@ const planetSchema = require('./planet.schema');
 const planetSchema = require('./planet.schema');
 
 const DEFAULT_FLIGHT_NUMBER = 1;
-const DEFAULT_LAUNCH = {
-	customers: ['TAMAGOSSI GROUP', 'NASA'],
-	destination: 'Kepler-442 b',
-	flightNumber: 1,
-	launchDate: new Date('Descember 27, 2030'),
-	mission: 'Kepler Exploration X',
-	rocket: 'Explorer 1S1',
-	upcoming: true,
-	success: true,
-};
-
-const launches = new Map();
-launches.set(DEFAULT_LAUNCH.flightNumber, DEFAULT_LAUNCH);
 
 async function scheduleNewLaunch(launch) {
 	try {
@@ -42,17 +29,17 @@ async function getLatestFlightNumber() {
 	return latestLaunch.flightNumber;
 }
 
-function abortLaunchById(id) {
-	const aborted = launches.get(id);
+async function abortLaunchById(id) {
+	const aborted = await launchesSchema.updateOne(
+		{ flightNumber: id },
+		{ upcoming: false, success: false }
+	);
 
-	aborted.upcoming = false;
-	aborted.success = false;
-
-	return aborted;
+	return aborted.ok === 1 && aborted.nModified === 1;
 }
 
-function checkIfLaunchIsExist(id) {
-	return launches.has(id);
+async function checkIfLaunchIsExist(flightNumber) {
+	return await launchesSchema.findOne({ flightNumber });
 }
 
 async function getLaunches() {
@@ -80,5 +67,4 @@ module.exports = {
 	scheduleNewLaunch,
 	checkIfLaunchIsExist,
 	getLaunches,
-	launches,
 };

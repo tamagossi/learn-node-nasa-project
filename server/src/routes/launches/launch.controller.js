@@ -31,20 +31,28 @@ function httpAddLaunch(req, res) {
 	}
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
 	try {
 		const { id } = req.params;
 
-		if (!checkIfLaunchIsExist(Number(id))) {
+		const isLaunchExist = await checkIfLaunchIsExist(Number(id));
+		if (!isLaunchExist) {
 			return res.status(404).json({
 				error: 'Launch not found',
 			});
 		}
 
-		abortLaunchById(Number(id));
-		return res.status(200).json({
-			message: 'Launch aborted',
-		});
+		const aborted = await abortLaunchById(Number(id));
+
+		if (!aborted) {
+			return res.status(400).json({
+				message: 'Launch not aborted',
+			});
+		} else {
+			return res.status(200).json({
+				message: 'Launch aborted',
+			});
+		}
 	} catch (error) {
 		throw new Error(error);
 	}
