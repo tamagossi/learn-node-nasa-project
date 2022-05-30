@@ -1,3 +1,5 @@
+const launchesSchema = require('./launches.schema');
+
 let latestFlightNumber = 1;
 const defaultLaunch = {
 	customers: ['TAMAGOSSI GROUP', 'NASA'],
@@ -13,7 +15,7 @@ const defaultLaunch = {
 const launches = new Map();
 launches.set(defaultLaunch.flightNumber, defaultLaunch);
 
-function addLaunch(launch) {
+async function addLaunch(launch) {
 	try {
 		latestFlightNumber++;
 		launches.set(latestFlightNumber, {
@@ -24,6 +26,7 @@ function addLaunch(launch) {
 			upcoming: true,
 		});
 
+		await saveLaunch(launch);
 		return launches.get(latestFlightNumber);
 	} catch (error) {
 		throw new Error(error);
@@ -43,8 +46,18 @@ function checkIfLaunchIsExist(id) {
 	return launches.has(id);
 }
 
-function getLaunches() {
-	return Array.from(launches.values());
+async function getLaunches() {
+	return await launchesSchema.find();
+}
+
+async function saveLaunch(launch) {
+	await launchesSchema.updateOne(
+		{
+			flightNumber: launch.flightNumber,
+		},
+		launch,
+		{ upsert: true }
+	);
 }
 
 module.exports = {
