@@ -1,8 +1,8 @@
-const { planets } = require('../../models/planet.model');
+const planetModel = require('../../models/planet.model');
 
-function getPlanets(_, res) {
+async function getPlanets(_, res) {
 	try {
-		return res.status(200).json(planets);
+		return res.status(200).json(await planetModel.getPlanets());
 	} catch (error) {
 		throw new Error(error);
 	}
