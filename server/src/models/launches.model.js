@@ -48,6 +48,11 @@ async function loadLaunchesData() {
 			},
 		});
 
+		if (response.status !== 200) {
+			console.log(`--- ❗️❗️ Problem downloading spaceX data ❗️❗️ ---`);
+			throw new Error('Problem downloading spaceX data');
+		}
+
 		return populateSpaceXLaunchesData(response.data.docs);
 	} catch (error) {
 		throw new Error(error);
@@ -55,7 +60,7 @@ async function loadLaunchesData() {
 }
 
 async function checkIfSpaceXDataIsLoaded() {
-	const launch = await findLaunch({
+	const launch = await getLaunch({
 		flightNumber: 1,
 		rocket: 'Falcon 1',
 		mission: 'FalconSat',
@@ -64,7 +69,7 @@ async function checkIfSpaceXDataIsLoaded() {
 	return launch ? true : false;
 }
 
-function populateSpaceXLaunchesData(launchData) {
+async function populateSpaceXLaunchesData(launchData) {
 	let launches = [];
 
 	for (const data of launchData) {
@@ -81,7 +86,7 @@ function populateSpaceXLaunchesData(launchData) {
 			upcoming: data.upcoming,
 		};
 
-		launches.push(launch);
+		await saveLaunch(launch);
 	}
 
 	return launches;
@@ -89,6 +94,12 @@ function populateSpaceXLaunchesData(launchData) {
 
 async function scheduleNewLaunch(launch) {
 	try {
+		const planet = await planetSchema.findOne({
+			kaplerName: launch.target,
+		});
+
+		if (!planet) throw new Error('No matching planet found');
+
 		const flightNumber = (await getLatestFlightNumber()) + 1;
 
 		const newLaunch = {
@@ -113,12 +124,6 @@ async function getLatestFlightNumber() {
 }
 
 async function saveLaunch(launch) {
-	const planet = await planetSchema.findOne({
-		kaplerName: launch.target,
-	});
-
-	if (!planet) throw new Error('No matching planet found');
-
 	await launchesSchema.findOneAndUpdate(
 		{
 			flightNumber: launch.flightNumber,
