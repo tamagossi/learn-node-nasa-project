@@ -23,15 +23,15 @@ async function getLaunch(filter) {
 	return await launchesSchema.findOne(filter);
 }
 
-async function getLaunches() {
-	return await launchesSchema.find();
+async function getLaunches(skip, limit) {
+	return await launchesSchema.find().skip(skip).limit(limit);
 }
 
 async function loadLaunchesData() {
 	try {
 		if (checkIfSpaceXDataIsLoaded()) return;
 
-		console.log(`--- ⬇️⬇️ Loading launch data from SpaceX ⬇️⬇️ ---`);
+		console.log(`--- ⬇ Loading launch data from SpaceX ⬇ ---`);
 		const response = await axios.post(`${SPACEX_API_URL}/launches/query`, {
 			query: {},
 			options: {

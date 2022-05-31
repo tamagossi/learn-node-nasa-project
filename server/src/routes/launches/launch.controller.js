@@ -1,3 +1,4 @@
+const { getPagination } = require('../../services/query');
 const {
 	abortLaunchById,
 	scheduleNewLaunch,
@@ -58,9 +59,11 @@ async function httpAbortLaunch(req, res) {
 	}
 }
 
-function httpGetLaunches(_, res) {
+function httpGetLaunches(req, res) {
 	try {
-		const launches = getLaunches();
+		const { skip, limit } = getPagination(req.query);
+
+		const launches = getLaunches(skip, limit);
 
 		return res.status(200).json(launches);
 	} catch (error) {
