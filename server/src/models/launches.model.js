@@ -24,7 +24,7 @@ async function getLaunch(filter) {
 }
 
 async function getLaunches(skip, limit) {
-	return await launchesSchema.find().skip(skip).limit(limit);
+	return await launchesSchema.find().sort({ flightNumber: 1 }).skip(skip).limit(limit);
 }
 
 async function loadLaunchesData() {
