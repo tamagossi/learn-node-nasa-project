@@ -13,7 +13,7 @@ describe('Test Launches API', () => {
 
 	describe('Test GET /launches', () => {
 		test('It should respond with 200 success', async () => {
-			const response = await request(app).get('/launches');
+			const response = await request(app).get('/v1/launches');
 			expect(response.statusCode).toBe(200);
 		});
 	});
@@ -40,7 +40,7 @@ describe('Test Launches API', () => {
 		};
 
 		test('It should respond with 201 created', async () => {
-			const response = await request(app).post('/launches').send(data);
+			const response = await request(app).post('/v1/launches').send(data);
 			expect(response.statusCode).toBe(201);
 
 			const requestDate = new Date(data.launchDate).valueOf;
@@ -51,7 +51,7 @@ describe('Test Launches API', () => {
 		});
 
 		test('It should catch missing required properties', async () => {
-			const response = await request(app).post('/launches').send(dataWithoutDate);
+			const response = await request(app).post('/v1/launches').send(dataWithoutDate);
 			expect(response.statusCode).toBe(400);
 
 			expect(response.body).toStrictEqual({
@@ -60,7 +60,7 @@ describe('Test Launches API', () => {
 		});
 
 		test('It should catch invalid dates', async () => {
-			const response = await request(app).post('/launches').send(dataWithInvalidDate);
+			const response = await request(app).post('/v1/launches').send(dataWithInvalidDate);
 			expect(response.statusCode).toBe(400);
 
 			expect(response.body).toStrictEqual({

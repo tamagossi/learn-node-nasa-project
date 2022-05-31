@@ -13,6 +13,7 @@
 		"cluster": "pm2 start src/server.js -i max"
 	},
 	"dependencies": {
+		"axios": "^0.27.2",
 		"cors": "^2.8.5",
 		"csv-parse": "^5.0.4",
 		"express": "^4.18.1",
