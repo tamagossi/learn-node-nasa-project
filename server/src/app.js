@@ -16,7 +16,7 @@ app.use(
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use(router);
+app.use('/v1', router);
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, '../public/', 'index.html'));
 });
