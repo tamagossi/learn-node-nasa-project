@@ -1,17 +1,17 @@
 {
 	"name": "nasa-project-api",
-	"version": "1.0.0",
 	"description": "",
+	"version": "1.0.0",
+	"author": "Raka Pratama",
 	"main": "src/server.js",
+	"license": "ISC",
 	"scripts": {
 		"dev": "nodemon src/server.js",
 		"start": "node src/server.js",
-		"test": "jest",
-		"test:watch": "jest --watch",
+		"test": "jest --detectOpenHandles",
+		"test:watch": "jest --watch --detectOpenHandles",
 		"cluster": "pm2 start src/server.js -i max"
 	},
-	"author": "Raka Pratama",
-	"license": "ISC",
 	"dependencies": {
 		"cors": "^2.8.5",
 		"csv-parse": "^5.0.4",
@@ -24,5 +24,8 @@
 		"jest": "^28.1.0",
 		"nodemon": "^2.0.16",
 		"supertest": "^6.2.3"
+	},
+	"jest": {
+		"testingEnvironment": "node"
 	}
 }

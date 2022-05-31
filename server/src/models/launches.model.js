@@ -1,6 +1,5 @@
 const launchesSchema = require('./launches.schema');
 const planetSchema = require('./planet.schema');
-const planetSchema = require('./planet.schema');
 
 const DEFAULT_FLIGHT_NUMBER = 1;
 
