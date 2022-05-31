@@ -16,7 +16,11 @@ async function abortLaunchById(id) {
 }
 
 async function checkIfLaunchIsExist(flightNumber) {
-	return await launchesSchema.findOne({ flightNumber });
+	return await getLaunch({ flightNumber });
+}
+
+async function getLaunch(filter) {
+	return await launchesSchema.findOne(filter);
 }
 
 async function getLaunches() {
@@ -25,9 +29,13 @@ async function getLaunches() {
 
 async function loadLaunchesData() {
 	try {
+		if (checkIfSpaceXDataIsLoaded()) return;
+
+		console.log(`--- ⬇️⬇️ Loading launch data from SpaceX ⬇️⬇️ ---`);
 		const response = await axios.post(`${SPACEX_API_URL}/launches/query`, {
 			query: {},
 			options: {
+				pagination: false,
 				populate: [
 					{ path: 'rocket', select: { name: 1 } },
 					{
@@ -44,6 +52,16 @@ async function loadLaunchesData() {
 	} catch (error) {
 		throw new Error(error);
 	}
+}
+
+async function checkIfSpaceXDataIsLoaded() {
+	const launch = await findLaunch({
+		flightNumber: 1,
+		rocket: 'Falcon 1',
+		mission: 'FalconSat',
+	});
+
+	return launch ? true : false;
 }
 
 function populateSpaceXLaunchesData(launchData) {
